@@ -13,7 +13,7 @@ export class InvalidCurrencyError extends AppError {
 export class InvalidAmountError extends AppError {
   constructor() {
     super(
-      "Amount must be a positive integer",
+      "Amount must be a positive safe integer",
       "INVALID_AMOUNT",
       400
     );
@@ -45,6 +45,16 @@ export class InvalidTransactionTypeError extends AppError {
     super(
       "Invalid transaction type for this operation",
       "INVALID_TRANSACTION_TYPE",
+      400
+    );
+  }
+}
+
+export class WalletBalanceLimitError extends AppError {
+  constructor() {
+    super(
+      "Wallet balance would exceed the maximum supported value",
+      "WALLET_BALANCE_LIMIT_EXCEEDED",
       400
     );
   }

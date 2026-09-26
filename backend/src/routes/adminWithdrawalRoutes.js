@@ -3,6 +3,7 @@ import authMiddleware from "../middleware/authMiddleware.js";
 import adminMiddleware from "../middleware/adminMiddleware.js";
 import Withdrawal from "../models/Withdrawal.js";
 import {
+    startProcessingWithdrawal,
     approveWithdrawal,
     rejectWithdrawal,
     cancelWithdrawal
@@ -12,6 +13,23 @@ const router = express.Router();
 
 router.use(authMiddleware);
 router.use(adminMiddleware);
+
+router.post("/:withdrawalId/process", async (req, res, next) => {
+    try {
+        const result = await startProcessingWithdrawal({
+            withdrawalId: req.params.withdrawalId,
+            reviewNote: req.body.reviewNote,
+            actorId: req.user._id
+        });
+
+        res.status(200).json({
+            success: true,
+            data: result
+        });
+    } catch (error) {
+        next(error);
+    }
+});
 
 router.post("/:withdrawalId/approve", async (req, res, next) => {
     try {

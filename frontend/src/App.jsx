@@ -1,10 +1,14 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { useAuth } from "./context/useAuth";
 
+import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+
 import Dashboard from "./pages/Dashboard";
 import Withdraw from "./pages/Withdraw";
+import Wallet from "./pages/Wallet";
+
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminWithdrawals from "./pages/admin/AdminWithdrawals";
 import AdminWallet from "./pages/admin/AdminWallet";
@@ -38,26 +42,29 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          path="/"
-          element={<Navigate to="/dashboard" replace />}
-        />
 
-        <Route
-          path="/login"
-          element={<Login />}
-        />
+        {/* Public */}
+        <Route path="/" element={<Home />} />
 
-        <Route
-          path="/register"
-          element={<Register />}
-        />
+        <Route path="/login" element={<Login />} />
 
+        <Route path="/register" element={<Register />} />
+
+        {/* User */}
         <Route
           path="/dashboard"
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/wallet"
+          element={
+            <ProtectedRoute>
+              <Wallet />
             </ProtectedRoute>
           }
         />
@@ -71,6 +78,7 @@ function App() {
           }
         />
 
+        {/* Admin */}
         <Route
           path="/admin"
           element={
@@ -107,10 +115,9 @@ function App() {
           }
         />
 
-        <Route
-          path="*"
-          element={<Navigate to="/dashboard" replace />}
-        />
+        {/* Unknown route */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+
       </Routes>
     </BrowserRouter>
   );

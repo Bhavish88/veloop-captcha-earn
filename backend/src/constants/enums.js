@@ -45,6 +45,8 @@ export const CURRENCIES = Object.freeze([
   "SPIN"
 ]);
 
+export const MAX_WALLET_BALANCE = Number.MAX_SAFE_INTEGER;
+
 export const TRANSACTION_DIRECTIONS = Object.freeze([
   "CREDIT",
   "DEBIT"
@@ -96,6 +98,7 @@ export const PAYOUT_TYPES = Object.freeze([
 
 export const AUDIT_ACTIONS = Object.freeze([
     "WITHDRAWAL_CREATED",
+  "WITHDRAWAL_PROCESSING",
     "WITHDRAWAL_APPROVED",
     "WITHDRAWAL_REJECTED",
     "WITHDRAWAL_CANCELLED",

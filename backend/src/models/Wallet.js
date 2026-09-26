@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { MAX_WALLET_BALANCE } from "../constants/enums.js";
 
 const walletSchema = new mongoose.Schema(
   {
@@ -16,9 +17,10 @@ const walletSchema = new mongoose.Schema(
       required: true,
       default: 0,
       min: 0,
+      max: MAX_WALLET_BALANCE,
       validate: {
-        validator: Number.isInteger,
-        message: "VEs must be an integer"
+        validator: Number.isSafeInteger,
+        message: "VEs must be a safe integer"
       }
     },
 
@@ -27,9 +29,10 @@ const walletSchema = new mongoose.Schema(
       required: true,
       default: 0,
       min: 0,
+      max: MAX_WALLET_BALANCE,
       validate: {
-        validator: Number.isInteger,
-        message: "SVEs must be an integer"
+        validator: Number.isSafeInteger,
+        message: "SVEs must be a safe integer"
       }
     },
 
@@ -38,9 +41,10 @@ const walletSchema = new mongoose.Schema(
       required: true,
       default: 0,
       min: 0,
+      max: MAX_WALLET_BALANCE,
       validate: {
-        validator: Number.isInteger,
-        message: "Gems must be an integer"
+        validator: Number.isSafeInteger,
+        message: "Gems must be a safe integer"
       }
     },
 
@@ -49,9 +53,10 @@ const walletSchema = new mongoose.Schema(
       required: true,
       default: 0,
       min: 0,
+      max: MAX_WALLET_BALANCE,
       validate: {
-        validator: Number.isInteger,
-        message: "Tokens must be an integer"
+        validator: Number.isSafeInteger,
+        message: "Tokens must be a safe integer"
       }
     },
 
@@ -60,9 +65,10 @@ const walletSchema = new mongoose.Schema(
       required: true,
       default: 0,
       min: 0,
+      max: MAX_WALLET_BALANCE,
       validate: {
-        validator: Number.isInteger,
-        message: "Spins must be an integer"
+        validator: Number.isSafeInteger,
+        message: "Spins must be a safe integer"
       }
     }
   },

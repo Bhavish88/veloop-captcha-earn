@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 import {
   CURRENCIES,
   PAYOUT_METHODS,
-  WITHDRAWAL_STATUS
+  WITHDRAWAL_STATUS,
+  MAX_WALLET_BALANCE
 } from "../constants/enums.js";
 
 const withdrawalSchema = new mongoose.Schema(
@@ -57,10 +58,11 @@ const withdrawalSchema = new mongoose.Schema(
       type: Number,
       required: true,
       min: 1,
+      max: MAX_WALLET_BALANCE,
       immutable: true,
       validate: {
-        validator: Number.isInteger,
-        message: "Currency amount must be an integer"
+        validator: Number.isSafeInteger,
+        message: "Currency amount must be a safe integer"
       }
     },
 
@@ -68,10 +70,11 @@ const withdrawalSchema = new mongoose.Schema(
       type: Number,
       required: true,
       min: 1,
+      max: MAX_WALLET_BALANCE,
       immutable: true,
       validate: {
-        validator: Number.isInteger,
-        message: "Payout amount must be an integer"
+        validator: Number.isSafeInteger,
+        message: "Payout amount must be a safe integer"
       }
     },
 
@@ -130,6 +133,11 @@ const withdrawalSchema = new mongoose.Schema(
       required: true,
       default: Date.now,
       immutable: true
+    },
+
+    processingAt: {
+      type: Date,
+      default: null
     },
 
     processedAt: {

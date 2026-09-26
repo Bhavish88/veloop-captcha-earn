@@ -411,14 +411,14 @@ Supported statuses:
 Typical lifecycle:
 
 ```text
-PENDING
-   ↓
-PROCESSING
-   ↓
-APPROVED
+PENDING → PROCESSING → APPROVED
+              → REJECTED
+              → CANCELLED
 ```
 
-A withdrawal can also be rejected or cancelled according to the supported status transitions.
+Only `PENDING → PROCESSING` is allowed before a terminal outcome. Approve, reject, and cancel requests are accepted only while the withdrawal is `PROCESSING`. All terminal statuses reject further transitions. Entering processing records `processingAt`; terminal outcomes record `processedAt`, the time the admin decision was recorded.
+
+`APPROVED` means an administrator reviewed the request and authorized it for payout. It is an approval decision only: this application does not initiate a transfer, record a disbursement reference, or verify that funds were sent. Therefore `APPROVED` is not proof of payment. The withdrawal debit remains in effect; only rejection or cancellation creates a reversal.
 
 When a withdrawal is rejected or cancelled after the wallet has already been debited, the system creates a compensating:
 
@@ -471,6 +471,24 @@ GET /admin/withdrawals?status=PENDING&page=1&limit=20
 
 **Status:** `200 OK`
 
+## Start Processing Withdrawal
+
+**POST** `/admin/withdrawals/:withdrawalId/process`
+
+### Request Body
+
+Optional:
+
+```json
+{
+  "reviewNote": "Payout details verified"
+}
+```
+
+### Result
+
+Transitions an eligible `PENDING` withdrawal to `PROCESSING` and records `processingAt`. Repeated or out-of-order transitions return `400 INVALID_WITHDRAWAL_TRANSITION`.
+
 ## Approve Withdrawal
 
 **POST** `/admin/withdrawals/:withdrawalId/approve`
@@ -487,13 +505,14 @@ Optional:
 
 ### Result
 
-Changes an eligible withdrawal to:
+Changes an eligible `PROCESSING` withdrawal to:
 
 ```text
 APPROVED
 ```
 
 The wallet is not debited again because the VE deduction occurs when the withdrawal is created.
+This records approval for payout only; it does not execute or confirm payment. `processedAt` records the final admin decision time, not a settlement time.
 
 ## Reject Withdrawal
 
@@ -510,7 +529,7 @@ The wallet is not debited again because the VE deduction occurs when the withdra
 
 ### Result
 
-Changes an eligible withdrawal to:
+Changes an eligible `PROCESSING` withdrawal to:
 
 ```text
 REJECTED
@@ -534,7 +553,7 @@ Optional:
 
 ### Result
 
-Changes an eligible withdrawal to:
+Changes an eligible `PROCESSING` withdrawal to:
 
 ```text
 CANCELLED
@@ -545,6 +564,12 @@ If VE was already deducted, a `WITHDRAWAL_REVERSAL` transaction restores the ded
 ## Admin Wallet Credit
 
 **POST** `/admin/wallet/credit`
+
+### Required Header
+
+```http
+Idempotency-Key: <unique-key>
+```
 
 ### Request Body
 
@@ -570,10 +595,17 @@ If VE was already deducted, a `WITHDRAWAL_REVERSAL` transaction restores the ded
 ```
 
 The operation creates an `ADMIN_CREDIT` ledger transaction and an audit record.
+Retries with the same key and identical request data return the original result without applying another credit. Reusing a key with different request data returns `409 IDEMPOTENCY_KEY_REUSED`. `amount` must be a positive safe integer. A credit that would raise the wallet currency balance above `9007199254740991` returns `400 WALLET_BALANCE_LIMIT_EXCEEDED`.
 
 ## Admin Wallet Debit
 
 **POST** `/admin/wallet/debit`
+
+### Required Header
+
+```http
+Idempotency-Key: <unique-key>
+```
 
 ### Request Body
 
@@ -599,6 +631,9 @@ The operation creates an `ADMIN_CREDIT` ledger transaction and an audit record.
 ```
 
 The operation creates an `ADMIN_DEBIT` ledger transaction and an audit record.
+Retries with the same key and identical request data return the original result without applying another debit. Reusing a key with different request data returns `409 IDEMPOTENCY_KEY_REUSED`. `amount` must be a positive safe integer; insufficient balances return `400 INSUFFICIENT_BALANCE`.
+
+Keys are scoped to the authenticated administrator and retained with the operation record. Use the same key only when retrying one logical operation; generate a new key for a new adjustment.
 
 ## Reconciliation
 

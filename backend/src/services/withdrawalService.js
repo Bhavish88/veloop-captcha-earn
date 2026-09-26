@@ -323,6 +323,70 @@ const validateStatusTransition = (currentStatus, newStatus) => {
     }
 };
 
+export const startProcessingWithdrawal = async ({
+    withdrawalId,
+    reviewNote = null,
+    actorId
+}) => {
+    if (
+        typeof withdrawalId !== "string" ||
+        withdrawalId.trim().length === 0
+    ) {
+        throw new AppError(
+            "Withdrawal ID is required",
+            "WITHDRAWAL_ID_REQUIRED",
+            400
+        );
+    }
+
+    const session = await mongoose.startSession();
+
+    try {
+        let result;
+
+        await session.withTransaction(async () => {
+            const withdrawal = await Withdrawal.findOne({
+                withdrawalId
+            }).session(session);
+
+            if (!withdrawal) {
+                throw new WithdrawalNotFoundError();
+            }
+
+            validateStatusTransition(withdrawal.status, "PROCESSING");
+
+            withdrawal.status = "PROCESSING";
+            withdrawal.processingAt = new Date();
+            withdrawal.reviewNote = reviewNote
+                ? reviewNote.trim()
+                : null;
+
+            await withdrawal.save({ session });
+            await createAuditLog({
+                actorId,
+                action: "WITHDRAWAL_PROCESSING",
+                targetUserId: withdrawal.userId,
+                targetType: "Withdrawal",
+                referenceId: withdrawal.withdrawalId,
+                metadata: {
+                    fromStatus: "PENDING",
+                    toStatus: "PROCESSING",
+                    reviewNote: withdrawal.reviewNote
+                },
+                session
+            });
+
+            result = withdrawal;
+        });
+
+        return {
+            withdrawal: result.toObject()
+        };
+    } finally {
+        await session.endSession();
+    }
+};
+
 export const rejectWithdrawal = async ({
     withdrawalId,
     rejectionReason,
@@ -472,7 +536,9 @@ await createAuditLog({
     targetType: "Withdrawal",
     referenceId: withdrawal.withdrawalId,
     metadata: {
-        reviewNote
+        reviewNote,
+        approvalMeaning: "APPROVED_FOR_PAYOUT",
+        settlementRecorded: false
     },
     session
 });

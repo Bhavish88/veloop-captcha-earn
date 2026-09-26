@@ -30,7 +30,8 @@ router.post("/credit",adminWalletRateLimiter, async (req, res, next) => {
             userId,
             currency,
             amount,
-            description
+            description,
+            idempotencyKey: req.get("Idempotency-Key")
         });
 
         res.status(200).json({
@@ -56,7 +57,8 @@ router.post("/debit",adminWalletRateLimiter, async (req, res, next) => {
             userId,
             currency,
             amount,
-            description
+            description,
+            idempotencyKey: req.get("Idempotency-Key")
         });
 
         res.status(200).json({

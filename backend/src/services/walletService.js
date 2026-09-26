@@ -6,7 +6,8 @@ import AppError from "../errors/AppError.js";
 import {
   InvalidCurrencyError,
   WalletNotFoundError,
-  InsufficientBalanceError
+  InsufficientBalanceError,
+  WalletBalanceLimitError
 } from "../errors/WalletErrors.js";
 import { createAuditLog } from "./auditLogService.js";
 import {
@@ -21,7 +22,8 @@ import {
   CURRENCIES,
   TRANSACTION_DIRECTIONS,
   TRANSACTION_TYPES,
-  CURRENCY_FIELD_MAP
+  CURRENCY_FIELD_MAP,
+  MAX_WALLET_BALANCE
 } from "../constants/enums.js";
 
 const getCurrencyField = (currency) => {
@@ -168,7 +170,10 @@ export const creditWalletInTransaction = async ({
 
   const updatedWallet = await Wallet.findOneAndUpdate(
     {
-      _id: wallet._id
+      _id: wallet._id,
+      [walletField]: {
+        $lte: MAX_WALLET_BALANCE - amount
+      }
     },
     {
       $inc: {
@@ -182,7 +187,7 @@ export const creditWalletInTransaction = async ({
   );
 
   if (!updatedWallet) {
-    throw new WalletNotFoundError();
+    throw new WalletBalanceLimitError();
   }
 
   const balanceAfter = updatedWallet[walletField];

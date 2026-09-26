@@ -3,7 +3,8 @@ import {
   CURRENCIES,
   TRANSACTION_DIRECTIONS,
   TRANSACTION_TYPES,
-  TRANSACTION_STATUS
+  TRANSACTION_STATUS,
+  MAX_WALLET_BALANCE
 } from "../constants/enums.js";
 
 const walletTransactionSchema = new mongoose.Schema(
@@ -58,10 +59,11 @@ const walletTransactionSchema = new mongoose.Schema(
       type: Number,
       required: true,
       min: 1,
+      max: MAX_WALLET_BALANCE,
       immutable: true,
       validate: {
-        validator: Number.isInteger,
-        message: "Transaction amount must be an integer"
+        validator: Number.isSafeInteger,
+        message: "Transaction amount must be a safe integer"
       }
     },
 
@@ -69,10 +71,11 @@ const walletTransactionSchema = new mongoose.Schema(
       type: Number,
       required: true,
       min: 0,
+      max: MAX_WALLET_BALANCE,
       immutable: true,
       validate: {
-        validator: Number.isInteger,
-        message: "Balance before must be an integer"
+        validator: Number.isSafeInteger,
+        message: "Balance before must be a safe integer"
       }
     },
 
@@ -80,10 +83,11 @@ const walletTransactionSchema = new mongoose.Schema(
       type: Number,
       required: true,
       min: 0,
+      max: MAX_WALLET_BALANCE,
       immutable: true,
       validate: {
-        validator: Number.isInteger,
-        message: "Balance after must be an integer"
+        validator: Number.isSafeInteger,
+        message: "Balance after must be a safe integer"
       }
     },
 

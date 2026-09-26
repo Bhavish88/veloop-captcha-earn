@@ -4,7 +4,7 @@
 
 VELoop Rewards uses MongoDB with Mongoose as the ODM.
 
-The current database model is separated into six primary collections:
+The current database model is separated into seven primary collections:
 
 ```text
 User
@@ -23,6 +23,8 @@ User
   +------> Withdrawal
   |
   +------> AuditLog
+  |
+  +------> AdminWalletOperation
 
 Wallet
   |
@@ -51,6 +53,7 @@ The application uses these Mongoose models:
 | `Withdrawal` | Withdrawal/payout requests |
 | `PayoutOption` | Backend-controlled payout configuration |
 | `AuditLog` | Auditable record of sensitive actions |
+| `AdminWalletOperation` | Idempotency record and replay snapshot for admin wallet mutations |
 
 ---
 
@@ -105,11 +108,11 @@ The Wallet model stores the current balance for each supported reward currency.
 | Field | Type | Required | Constraints / Purpose |
 |---|---|---:|---|
 | `userId` | ObjectId | Yes | References `User`; unique, immutable, indexed |
-| `ves` | Number | Yes | VEs balance; integer, minimum 0 |
-| `sves` | Number | Yes | SVEs balance; integer, minimum 0 |
-| `gems` | Number | Yes | Gems balance; integer, minimum 0 |
-| `tokens` | Number | Yes | Tokens balance; integer, minimum 0 |
-| `spins` | Number | Yes | Spins balance; integer, minimum 0 |
+| `ves` | Number | Yes | VEs balance; safe integer, 0–9007199254740991 |
+| `sves` | Number | Yes | SVEs balance; safe integer, 0–9007199254740991 |
+| `gems` | Number | Yes | Gems balance; safe integer, 0–9007199254740991 |
+| `tokens` | Number | Yes | Tokens balance; safe integer, 0–9007199254740991 |
+| `spins` | Number | Yes | Spins balance; safe integer, 0–9007199254740991 |
 | `createdAt` | Date | Automatic | Mongoose timestamps |
 | `updatedAt` | Date | Automatic | Mongoose timestamps |
 
@@ -155,9 +158,9 @@ This collection is the wallet ledger. Each wallet mutation creates a transaction
 | `currency` | String | Yes | Enum from `CURRENCIES`; immutable |
 | `direction` | String | Yes | `CREDIT` or `DEBIT`; immutable |
 | `type` | String | Yes | Enum from `TRANSACTION_TYPES`; immutable |
-| `amount` | Number | Yes | Positive integer; immutable |
-| `balanceBefore` | Number | Yes | Non-negative integer; immutable |
-| `balanceAfter` | Number | Yes | Non-negative integer; immutable |
+| `amount` | Number | Yes | Positive safe integer; immutable |
+| `balanceBefore` | Number | Yes | Non-negative safe integer; immutable |
+| `balanceAfter` | Number | Yes | Non-negative safe integer; immutable |
 | `source` | String | Yes | Describes operation source; immutable |
 | `referenceId` | String | No | Related operation reference; indexed |
 | `status` | String | Yes | Enum from `TRANSACTION_STATUS`; default `COMPLETED` |
@@ -213,8 +216,8 @@ This collection stores user payout requests and their lifecycle.
 | `method` | String | Yes | Enum from `PAYOUT_METHODS`; immutable |
 | `optionId` | String | Yes | Payout option identifier; immutable, indexed |
 | `currency` | String | Yes | Enum from `CURRENCIES`; immutable |
-| `currencyAmount` | Number | Yes | Positive integer; immutable |
-| `payoutAmount` | Number | Yes | Positive integer; immutable |
+| `currencyAmount` | Number | Yes | Positive safe integer; immutable |
+| `payoutAmount` | Number | Yes | Positive safe integer; immutable |
 | `payoutCurrency` | String | Yes | Defaults to `INR`; immutable |
 | `payoutDetails` | Mixed | Yes | Method-specific payout information |
 | `status` | String | Yes | Enum from `WITHDRAWAL_STATUS`; default `PENDING`; indexed |
@@ -223,7 +226,8 @@ This collection stores user payout requests and their lifecycle.
 | `transactionId` | String | Yes | Related wallet transaction; immutable, indexed |
 | `idempotencyKey` | String | Yes | Duplicate-request protection |
 | `requestedAt` | Date | Yes | Request creation time; immutable |
-| `processedAt` | Date | No | Processing completion time |
+| `processingAt` | Date | No | Time an admin moved the request into `PROCESSING` |
+| `processedAt` | Date | No | Time the final admin decision was recorded; not payout settlement time |
 | `createdAt` | Date | Automatic | Mongoose timestamps |
 | `updatedAt` | Date | Automatic | Mongoose timestamps |
 
@@ -281,8 +285,8 @@ This collection stores payout configuration controlled by the backend.
 | `name` | String | Yes | Trimmed, 2–100 characters |
 | `type` | String | Yes | Enum from `PAYOUT_TYPES` |
 | `currency` | String | Yes | Enum from `CURRENCIES` |
-| `requiredAmount` | Number | Yes | Positive integer required for redemption |
-| `payoutAmount` | Number | Yes | Positive integer payout value |
+| `requiredAmount` | Number | Yes | Positive safe integer required for redemption |
+| `payoutAmount` | Number | Yes | Positive safe integer payout value |
 | `payoutCurrency` | String | Yes | Defaults to `INR` |
 | `active` | Boolean | Yes | Controls availability; default `true`; indexed |
 | `eligibility` | Mixed | No | Eligibility configuration |
@@ -350,6 +354,7 @@ Examples used by the wallet system include:
 
 ```text
 WITHDRAWAL_CREATED
+WITHDRAWAL_PROCESSING
 WITHDRAWAL_APPROVED
 WITHDRAWAL_REJECTED
 WITHDRAWAL_CANCELLED
@@ -373,7 +378,28 @@ referenceId + createdAt
 
 ---
 
-# 9. Relationships
+# 9. AdminWalletOperation Model
+
+Model:
+
+```text
+AdminWalletOperation
+```
+
+Each successful admin credit or debit stores the administrator, idempotency key, request hash, operation type, resulting transaction ID, and original wallet response snapshot. The operation record is written in the same MongoDB transaction as the balance change, ledger entry, and audit log.
+
+The unique compound index on `adminId + idempotencyKey` prevents the same administrator from applying a logical operation twice. Matching retries replay the stored result; a key reused with different request data is rejected.
+
+### Indexes
+
+```text
+transactionId (unique)
+adminId + idempotencyKey (unique)
+```
+
+---
+
+# 10. Relationships
 
 The logical relationships are:
 
@@ -418,7 +444,7 @@ MongoDB does not enforce relational foreign keys in the same way as a traditiona
 
 ---
 
-# 10. Indexing Strategy
+# 11. Indexing Strategy
 
 Important indexes in the current models include:
 
@@ -489,7 +515,7 @@ These indexes support common wallet, withdrawal, payout, and audit queries.
 
 ---
 
-# 11. Immutability Strategy
+# 12. Immutability Strategy
 
 Financial-history fields are intentionally marked immutable in the schemas.
 
@@ -519,7 +545,7 @@ For a reversal, the original transaction remains part of the history and a separ
 
 ---
 
-# 12. Wallet Accounting Model
+# 13. Wallet Accounting Model
 
 The current wallet represents the latest balance.
 

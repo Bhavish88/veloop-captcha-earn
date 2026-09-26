@@ -367,6 +367,8 @@ The wallet is deducted when the withdrawal is created.
 
 If the withdrawal is subsequently rejected or cancelled, a compensating reversal transaction restores the deducted amount.
 
+`APPROVED` means an administrator authorized the request for payout. It is not evidence that payment was sent: this application does not execute transfers or store settlement confirmations. `processedAt` is the time the final admin decision was recorded.
+
 ---
 
 ## 9. Payout Configuration
@@ -466,9 +468,11 @@ Typical lifecycle:
 
 ```text
 PENDING → PROCESSING → APPROVED
+                    → REJECTED
+                    → CANCELLED
 ```
 
-Other supported outcomes include rejection and cancellation according to the implemented status transition rules.
+Only `PENDING → PROCESSING` is allowed before a terminal outcome. Approve, reject, and cancel are available only from `PROCESSING`; terminal statuses cannot transition again. `APPROVED` means authorized for payout, not paid; this application has no payout execution or settlement tracking. Entering processing records `processingAt`, and terminal outcomes record `processedAt` as the final admin decision time.
 
 Terminal states are not allowed to transition into unrelated later states.
 
@@ -615,6 +619,7 @@ Examples include:
 
 ```text
 WITHDRAWAL_CREATED
+WITHDRAWAL_PROCESSING
 WITHDRAWAL_APPROVED
 WITHDRAWAL_REJECTED
 WITHDRAWAL_CANCELLED

@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 import {
   CURRENCIES,
   PAYOUT_METHODS,
-  PAYOUT_TYPES
+  PAYOUT_TYPES,
+  MAX_WALLET_BALANCE
 } from "../constants/enums.js";
 
 const payoutOptionSchema = new mongoose.Schema(
@@ -47,9 +48,10 @@ const payoutOptionSchema = new mongoose.Schema(
       type: Number,
       required: true,
       min: 1,
+      max: MAX_WALLET_BALANCE,
       validate: {
-        validator: Number.isInteger,
-        message: "Required amount must be an integer"
+        validator: Number.isSafeInteger,
+        message: "Required amount must be a safe integer"
       }
     },
 
@@ -57,9 +59,10 @@ const payoutOptionSchema = new mongoose.Schema(
       type: Number,
       required: true,
       min: 1,
+      max: MAX_WALLET_BALANCE,
       validate: {
-        validator: Number.isInteger,
-        message: "Payout amount must be an integer"
+        validator: Number.isSafeInteger,
+        message: "Payout amount must be a safe integer"
       }
     },
 

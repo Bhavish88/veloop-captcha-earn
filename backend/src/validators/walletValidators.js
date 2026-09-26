@@ -2,7 +2,8 @@ import AppError from "../errors/AppError.js";
 import {
   CURRENCIES,
   CREDIT_TRANSACTION_TYPES,
-  DEBIT_TRANSACTION_TYPES
+  DEBIT_TRANSACTION_TYPES,
+  MAX_WALLET_BALANCE
 } from "../constants/enums.js";
 
 export const validateAmount = (amount) => {
@@ -14,9 +15,9 @@ export const validateAmount = (amount) => {
     );
   }
 
-  if (!Number.isInteger(amount) || amount <= 0) {
+  if (!Number.isSafeInteger(amount) || amount <= 0) {
     throw new AppError(
-      "Amount must be a positive integer",
+      `Amount must be a positive safe integer no greater than ${MAX_WALLET_BALANCE}`,
       "INVALID_AMOUNT",
       400
     );

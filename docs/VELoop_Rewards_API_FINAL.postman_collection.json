@@ -392,6 +392,44 @@
               }
             },
             {
+              "name": "Start Processing Withdrawal",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{adminToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reviewNote\": \"Started processing via Postman\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/admin/withdrawals/{withdrawalId}/process",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "withdrawals",
+                    "{withdrawalId}",
+                    "process"
+                  ]
+                }
+              }
+            },
+            {
               "name": "Approve Withdrawal",
               "request": {
                 "method": "POST",
@@ -524,7 +562,13 @@
                     }
                   ]
                 },
-                "header": [],
+                "header": [
+                  {
+                    "key": "Idempotency-Key",
+                    "value": "{{adminCreditIdempotencyKey}}",
+                    "type": "text"
+                  }
+                ],
                 "body": {
                   "mode": "raw",
                   "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"currency\": \"VE\",\n  \"amount\": 2400,\n  \"description\": \"Postman test credit\"\n}",
@@ -561,7 +605,13 @@
                     }
                   ]
                 },
-                "header": [],
+                "header": [
+                  {
+                    "key": "Idempotency-Key",
+                    "value": "{{adminDebitIdempotencyKey}}",
+                    "type": "text"
+                  }
+                ],
                 "body": {
                   "mode": "raw",
                   "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"currency\": \"VE\",\n  \"amount\": 100,\n  \"description\": \"Postman test debit\"\n}",
@@ -641,6 +691,14 @@
     },
     {
       "key": "withdrawalId",
+      "value": ""
+    },
+    {
+      "key": "adminCreditIdempotencyKey",
+      "value": ""
+    },
+    {
+      "key": "adminDebitIdempotencyKey",
       "value": ""
     }
   ]

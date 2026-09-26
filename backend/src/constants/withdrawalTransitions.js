@@ -1,14 +1,12 @@
 export const WITHDRAWAL_TRANSITIONS = Object.freeze({
   PENDING: Object.freeze([
-    "PROCESSING",
-    "APPROVED",
-    "REJECTED",
-    "CANCELLED"
+    "PROCESSING"
   ]),
 
   PROCESSING: Object.freeze([
     "APPROVED",
-    "REJECTED"
+    "REJECTED",
+    "CANCELLED"
   ]),
 
   APPROVED: Object.freeze([]),
