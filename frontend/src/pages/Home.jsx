@@ -1,78 +1,111 @@
+import "./Home.css";
+import BrandMark from "../components/BrandMark";
+
 const earningMethods = [
   {
-    icon: "✓",
-    title: "Complete Tasks",
-    description: "Complete simple online tasks and earn VE rewards.",
+    icon: "play",
+    title: "Watch Ads",
+    description: "Ad rewards are recognized by VELOop; availability can vary.",
   },
   {
-    icon: "▶",
-    title: "Watch & Earn",
-    description: "Watch available content and receive rewards for your time.",
-  },
-  {
-    icon: "◉",
+    icon: "survey",
     title: "Surveys",
-    description: "Share your opinions through available surveys and earn.",
+    description: "An informational overview of survey opportunities when offered.",
   },
   {
-    icon: "◆",
+    icon: "receipt",
+    title: "Pay & Earn",
+    description: "Explore paid activities when they are made available.",
+  },
+  {
+    icon: "users",
+    title: "UPI Refer & Earn",
+    description: "Referral activity can be reflected in your account rewards.",
+  },
+  {
+    icon: "game",
     title: "Play & Earn",
-    description: "Discover games and activities that let you earn rewards.",
+    description: "Game rewards are a supported reward type; activities may vary.",
   },
   {
-    icon: "▣",
-    title: "App Tasks",
-    description: "Complete app-based activities and collect rewards.",
-  },
-  {
-    icon: "↗",
-    title: "Refer & Earn",
-    description: "Invite others and earn through the VELOop referral system.",
+    icon: "sparkle",
+    title: "More activities",
+    description: "Check your account for currently available reward options.",
   },
 ];
 
 const steps = [
   {
     number: "01",
-    title: "Create your account",
-    description: "Sign up for VELOop and get started in a few simple steps.",
+    icon: "sparkle",
+    title: "Earn",
+    description: "Explore activities that are currently available to you.",
   },
   {
     number: "02",
-    title: "Complete activities",
-    description: "Choose from available tasks, games, surveys and other earning opportunities.",
+    icon: "wallet",
+    title: "Build your balance",
+    description: "Review your wallet balance and transaction activity.",
   },
   {
     number: "03",
-    title: "Earn rewards",
-    description: "Your completed activities contribute rewards to your VELOop account.",
+    icon: "receipt",
+    title: "Choose a reward",
+    description: "Browse the payout options available in your account.",
   },
   {
     number: "04",
+    icon: "arrow",
     title: "Redeem",
-    description: "Use the available withdrawal and reward options when eligible.",
+    description: "Submit a withdrawal request when you meet its requirements.",
   },
 ];
 
+const iconArtwork = {
+  play: <><rect x="3" y="5" width="18" height="14" rx="3" /><path d="m10 9 5 3-5 3z" /></>,
+  survey: <><rect x="5" y="3" width="14" height="18" rx="2" /><path d="M9 8h6M9 12h6M9 16h3" /><path d="m7 8 .5.5L8.5 7.5" /></>,
+  receipt: <><path d="M5 3h14v18l-3-2-3 2-3-2-3 2-2-2z" /><path d="M9 8h6M9 12h6M9 16h3" /></>,
+  users: <><path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="10" cy="7" r="4" /><path d="M20 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" /></>,
+  game: <><path d="M6 11h4m-2-2v4m7-1h.01M18 10h.01" /><path d="M6.5 7h11a4 4 0 0 1 3.9 4.9l-1.1 4.4a2 2 0 0 1-3.3 1l-2.1-1.8H9.1L7 17.3a2 2 0 0 1-3.3-1l-1.1-4.4A4 4 0 0 1 6.5 7Z" /></>,
+  sparkle: <><path d="m12 3 1.9 5.8L20 11l-6.1 2.2L12 19l-1.9-5.8L4 11l6.1-2.2L12 3Z" /><path d="m19 14 .9 2.1L22 17l-2.1.9L19 20l-.9-2.1L16 17l2.1-.9L19 14Z" /></>,
+  wallet: <><rect x="3" y="6" width="18" height="15" rx="3" /><path d="M3 10h18M16 15h2" /><path d="M6 6V4a1 1 0 0 1 1-1h11" /></>,
+  arrow: <><path d="M5 12h14m-6-6 6 6-6 6" /></>,
+};
+
+function Icon({ name, className = "" }) {
+  return (
+    <svg
+      aria-hidden="true"
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {iconArtwork[name]}
+    </svg>
+  );
+}
+
 function Home() {
   return (
-    <div className="min-h-screen bg-white text-neutral-950">
+    <div className="home-page min-h-screen bg-white text-neutral-950">
 
       {/* Navbar */}
-      <header className="border-b border-neutral-200 bg-white">
-        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
+      <header className="home-header sticky top-0 z-50 border-b border-neutral-200 bg-white/95">
+        <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-5 lg:px-8">
 
           <a href="/" className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-yellow-400 font-bold text-black">
-              V
-            </div>
+            <BrandMark className="home-brand-mark h-10 w-10" />
 
             <span className="text-xl font-bold tracking-tight">
               VELOop
             </span>
           </a>
 
-          <nav className="hidden items-center gap-8 md:flex">
+          <nav className="hidden items-center gap-7 md:flex">
             <a
               href="#how-it-works"
               className="text-sm font-medium text-neutral-600 transition hover:text-black"
@@ -95,6 +128,20 @@ function Home() {
             </a>
           </nav>
 
+          <details className="home-mobile-menu md:hidden">
+            <summary aria-label="Open navigation menu">
+              <span />
+              <span />
+              <span />
+            </summary>
+            <nav aria-label="Mobile navigation">
+              <a href="#how-it-works">How It Works</a>
+              <a href="#ways-to-earn">Ways to Earn</a>
+              <a href="#why-veloop">Why VELOop</a>
+              <a href="/login">Log in</a>
+            </nav>
+          </details>
+
           <div className="flex items-center gap-3">
             <a
               href="/login"
@@ -105,7 +152,7 @@ function Home() {
 
             <a
               href="/register"
-              className="rounded-xl bg-black px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-neutral-800"
+              className="home-button home-button-primary rounded-xl bg-yellow-400 px-5 py-2.5 text-sm font-semibold text-black transition hover:bg-yellow-300"
             >
               Start Earning
             </a>
@@ -118,34 +165,32 @@ function Home() {
       {/* Hero */}
       <main>
 
-        <section className="overflow-hidden border-b border-neutral-200">
-          <div className="mx-auto grid min-h-[680px] max-w-7xl items-center gap-16 px-6 py-20 lg:grid-cols-2 lg:px-8">
+        <section className="home-hero overflow-hidden border-b border-neutral-200">
+          <div className="mx-auto grid min-h-[620px] max-w-7xl items-center gap-14 px-6 py-20 lg:grid-cols-2 lg:px-8">
 
             {/* Hero copy */}
-            <div className="max-w-2xl">
+            <div className="home-hero-copy max-w-2xl">
 
               <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-neutral-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-neutral-600">
                 <span className="h-2 w-2 rounded-full bg-yellow-400" />
                 The rewards platform
               </div>
 
-              <h1 className="text-5xl font-bold leading-[1.05] tracking-[-0.04em] text-neutral-950 sm:text-6xl lg:text-7xl">
-                Turn your free time into{" "}
-                <span className="text-yellow-500">
-                  rewards.
-                </span>
+              <h1 className="home-title text-5xl font-bold leading-[1.05] tracking-[-0.04em] text-neutral-950 sm:text-6xl lg:text-7xl">
+                Make your time count with{" "}
+                <span className="text-yellow-600">VELOop.</span>
               </h1>
 
               <p className="mt-7 max-w-xl text-lg leading-8 text-neutral-600">
-                Complete tasks, watch content, play, participate and discover
-                new ways to earn rewards with VELOop.
+                Explore reward activities, follow your wallet, and see the
+                payout options available to you.
               </p>
 
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
 
                 <a
                   href="/register"
-                  className="rounded-xl bg-black px-7 py-3.5 text-center text-sm font-semibold text-white transition hover:bg-neutral-800"
+                  className="home-button home-button-primary rounded-xl bg-yellow-400 px-7 py-3.5 text-center text-sm font-semibold text-black transition hover:bg-yellow-300"
                 >
                   Start Earning
                 </a>
@@ -159,127 +204,32 @@ function Home() {
 
               </div>
 
-              <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-neutral-500">
-                <span>Multiple earning methods</span>
-                <span>•</span>
-                <span>Reward-focused platform</span>
-                <span>•</span>
-                <span>Flexible participation</span>
-              </div>
+              <p className="home-availability mt-6 text-sm text-neutral-500">
+                Activity availability can vary. No earnings are guaranteed.
+              </p>
 
             </div>
 
 
             {/* Hero visual */}
-            <div className="relative">
-
-              <div className="relative mx-auto max-w-lg">
-
-                <div className="absolute -left-10 top-12 h-40 w-40 rounded-full bg-yellow-200/60 blur-3xl" />
-                <div className="absolute -right-10 bottom-10 h-48 w-48 rounded-full bg-neutral-200 blur-3xl" />
-
-                <div className="relative rounded-[2rem] border border-neutral-200 bg-neutral-50 p-5 shadow-2xl shadow-neutral-200/60">
-
-                  {/* Fake dashboard preview */}
-                  <div className="rounded-2xl bg-white p-5 shadow-sm">
-
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-xs font-medium text-neutral-500">
-                          Available rewards
-                        </p>
-
-                        <p className="mt-1 text-3xl font-bold tracking-tight">
-                          2,450
-                          <span className="ml-2 text-sm font-semibold text-yellow-500">
-                            VE
-                          </span>
-                        </p>
-                      </div>
-
-                      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-yellow-100 font-bold text-yellow-700">
-                        V
-                      </div>
-                    </div>
-
-
-                    <div className="mt-6 h-2 overflow-hidden rounded-full bg-neutral-100">
-                      <div className="h-full w-[68%] rounded-full bg-yellow-400" />
-                    </div>
-
-
-                    <div className="mt-6 grid grid-cols-2 gap-3">
-
-                      <div className="rounded-xl border border-neutral-200 p-4">
-                        <p className="text-xs text-neutral-500">
-                          Daily Bonus
-                        </p>
-
-                        <p className="mt-2 font-bold">
-                          +100 VE
-                        </p>
-                      </div>
-
-                      <div className="rounded-xl border border-neutral-200 p-4">
-                        <p className="text-xs text-neutral-500">
-                          Tasks
-                        </p>
-
-                        <p className="mt-2 font-bold">
-                          Available
-                        </p>
-                      </div>
-
-                    </div>
-
-                  </div>
-
-
-                  {/* Reward notification */}
-                  <div className="absolute -right-7 top-16 rounded-2xl border border-neutral-200 bg-white p-4 shadow-xl">
-
-                    <div className="flex items-center gap-3">
-
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-100 font-bold text-yellow-700">
-                        +
-                      </div>
-
-                      <div>
-                        <p className="text-xs text-neutral-500">
-                          Reward earned
-                        </p>
-
-                        <p className="font-bold">
-                          +250 VE
-                        </p>
-                      </div>
-
-                    </div>
-
-                  </div>
-
-
-                  {/* Task card */}
-                  <div className="absolute -bottom-7 -left-7 rounded-2xl border border-neutral-200 bg-black p-4 text-white shadow-xl">
-
-                    <p className="text-xs text-neutral-400">
-                      Today's activity
-                    </p>
-
-                    <p className="mt-1 font-semibold">
-                      Keep earning
-                    </p>
-
-                    <div className="mt-3 h-1.5 w-32 overflow-hidden rounded-full bg-neutral-700">
-                      <div className="h-full w-2/3 rounded-full bg-yellow-400" />
-                    </div>
-
-                  </div>
-
+            <div className="home-hero-visual" aria-label="Illustration of the VELOop wallet and reward activity">
+              <div className="home-visual-label"><span /> Your rewards, in one place</div>
+              <div className="home-wallet-preview">
+                <div className="home-preview-topline">
+                  <div className="home-preview-brand"><BrandMark /><div><strong>VELOop</strong><small>Rewards wallet</small></div></div>
+                  <span className="home-preview-menu" aria-hidden="true">•••</span>
                 </div>
-
+                <div className="home-preview-balance">
+                  <span>Wallet balance</span>
+                  <strong>•••••• <small>VE</small></strong>
+                  <p>Your balance, shown in your account</p>
+                </div>
+                <div className="home-preview-section-title"><strong>Wallet activity</strong><span>Recent</span></div>
+                <div className="home-preview-activity"><span className="home-activity-icon"><Icon name="play" /></span><span><strong>Ad reward</strong><small>Reward activity</small></span><span className="home-activity-mark">+</span></div>
+                <div className="home-preview-activity"><span className="home-activity-icon home-activity-icon-neutral"><Icon name="users" /></span><span><strong>Referral</strong><small>Account activity</small></span><span className="home-activity-mark">+</span></div>
+                <div className="home-preview-footer"><Icon name="wallet" /><span>Balance and transactions</span><Icon name="arrow" /></div>
               </div>
-
+              <div className="home-preview-caption"><span className="home-caption-dot" /> A product illustration, not a live account</div>
             </div>
 
           </div>
@@ -291,7 +241,7 @@ function Home() {
           id="ways-to-earn"
           className="border-b border-neutral-200 bg-neutral-50"
         >
-          <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+          <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
 
             <div className="max-w-2xl">
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-yellow-600">
@@ -303,22 +253,22 @@ function Home() {
               </h2>
 
               <p className="mt-5 text-lg leading-8 text-neutral-600">
-                VELOop brings different earning activities together in one
-                platform.
+                Get a quick overview of reward activity types and check your
+                account for what is currently available.
               </p>
             </div>
 
 
-            <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="home-method-grid mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 
               {earningMethods.map((method) => (
                 <div
                   key={method.title}
-                  className="group rounded-2xl border border-neutral-200 bg-white p-6 transition duration-200 hover:-translate-y-1 hover:border-neutral-300 hover:shadow-lg hover:shadow-neutral-200/50"
+                  className="home-method-card group rounded-2xl border border-neutral-200 bg-white p-6 transition duration-200"
                 >
 
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-yellow-100 font-bold text-yellow-700">
-                    {method.icon}
+                  <div className="home-icon-box flex h-11 w-11 items-center justify-center rounded-xl bg-yellow-100 font-bold text-yellow-700">
+                    <Icon name={method.icon} className="h-5 w-5" />
                   </div>
 
                   <h3 className="mt-5 text-lg font-semibold">
@@ -329,10 +279,14 @@ function Home() {
                     {method.description}
                   </p>
 
+                  <span className="home-card-note">Activity overview</span>
+
                 </div>
               ))}
 
             </div>
+
+            <p className="home-method-disclaimer">Activity types are informational. Availability varies, and this page does not start activities or promise rewards.</p>
 
           </div>
         </section>
@@ -363,14 +317,15 @@ function Home() {
             </div>
 
 
-            <div className="mt-16 grid gap-8 md:grid-cols-4">
+            <div className="home-steps mt-16 grid gap-8 md:grid-cols-4">
 
-              {steps.map((step) => (
-                <div key={step.number} className="relative">
+              {steps.map((step, index) => (
+                <div key={step.number} className="home-step relative">
 
-                  <p className="text-sm font-bold text-yellow-500">
-                    {step.number}
-                  </p>
+                  <div className="home-step-icon">
+                    <Icon name={step.icon} className="h-5 w-5" />
+                    <span>{step.number}</span>
+                  </div>
 
                   <h3 className="mt-4 text-xl font-semibold">
                     {step.title}
@@ -379,6 +334,10 @@ function Home() {
                   <p className="mt-3 text-sm leading-6 text-neutral-600">
                     {step.description}
                   </p>
+
+                  {index < steps.length - 1 && (
+                    <Icon name="arrow" className="home-step-arrow" />
+                  )}
 
                 </div>
               ))}
@@ -392,7 +351,7 @@ function Home() {
         {/* Why VELOop */}
         <section
           id="why-veloop"
-          className="border-b border-neutral-200 bg-neutral-950 text-white"
+          className="home-value-section border-b border-neutral-200 bg-neutral-50"
         >
           <div className="mx-auto grid max-w-7xl gap-16 px-6 py-24 lg:grid-cols-2 lg:px-8">
 
@@ -403,78 +362,67 @@ function Home() {
               </p>
 
               <h2 className="mt-4 text-4xl font-bold tracking-tight sm:text-5xl">
-                One platform for different ways to earn.
+                The essentials, all in one account.
               </h2>
 
-              <p className="mt-6 max-w-xl text-lg leading-8 text-neutral-400">
-                Instead of relying on a single activity, VELOop brings
-                different earning opportunities into one rewards ecosystem.
+              <p className="mt-6 max-w-xl text-lg leading-8 text-neutral-600">
+                Keep track of wallet activity and explore the payout choices
+                configured for your account.
               </p>
 
             </div>
 
 
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="home-value-grid grid gap-3 sm:grid-cols-2">
 
-              <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-6">
-                <p className="text-2xl font-bold text-yellow-400">
-                  01
-                </p>
+              <div className="home-value-item rounded-2xl border border-neutral-200 bg-white p-6">
+                <Icon name="wallet" className="home-value-icon" />
 
-                <h3 className="mt-5 font-semibold">
-                  Multiple activities
+                <h3 className="mt-4 font-semibold">
+                  Wallet overview
                 </h3>
 
-                <p className="mt-2 text-sm leading-6 text-neutral-400">
-                  Explore different ways to participate instead of depending
-                  on one earning method.
+                <p className="mt-2 text-sm leading-6 text-neutral-600">
+                  Review your balance and transaction history from one place.
                 </p>
               </div>
 
 
-              <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-6">
-                <p className="text-2xl font-bold text-yellow-400">
-                  02
-                </p>
+              <div className="home-value-item rounded-2xl border border-neutral-200 bg-white p-6">
+                <Icon name="sparkle" className="home-value-icon" />
 
-                <h3 className="mt-5 font-semibold">
-                  Reward ecosystem
+                <h3 className="mt-4 font-semibold">
+                  Reward activity
                 </h3>
 
-                <p className="mt-2 text-sm leading-6 text-neutral-400">
-                  Keep your earning activities and rewards connected within
-                  one platform.
+                <p className="mt-2 text-sm leading-6 text-neutral-600">
+                  See supported reward activity recorded in your wallet.
                 </p>
               </div>
 
 
-              <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-6">
-                <p className="text-2xl font-bold text-yellow-400">
-                  03
-                </p>
+              <div className="home-value-item rounded-2xl border border-neutral-200 bg-white p-6">
+                <Icon name="receipt" className="home-value-icon" />
 
-                <h3 className="mt-5 font-semibold">
-                  Flexible participation
+                <h3 className="mt-4 font-semibold">
+                  Payout options
                 </h3>
 
-                <p className="mt-2 text-sm leading-6 text-neutral-400">
-                  Choose activities based on what is available and what you
-                  want to do.
+                <p className="mt-2 text-sm leading-6 text-neutral-600">
+                  Browse configured options before starting a withdrawal.
                 </p>
               </div>
 
 
-              <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-6">
-                <p className="text-2xl font-bold text-yellow-400">
-                  04
-                </p>
+              <div className="home-value-item rounded-2xl border border-neutral-200 bg-white p-6">
+                <Icon name="arrow" className="home-value-icon" />
 
-                <h3 className="mt-5 font-semibold">
-                  Built around rewards
+                <h3 className="mt-4 font-semibold">
+                  Request tracking
                 </h3>
 
-                <p className="mt-2 text-sm leading-6 text-neutral-400">
-                  Track your progress and rewards from one central account.
+                <p className="mt-2 text-sm leading-6 text-neutral-600">
+                  Follow withdrawal requests through their account statuses.
                 </p>
               </div>
 
@@ -485,21 +433,21 @@ function Home() {
 
 
         {/* Final CTA */}
-        <section className="bg-yellow-400">
+        <section className="home-final-cta bg-neutral-950">
           <div className="mx-auto max-w-7xl px-6 py-20 text-center lg:px-8">
 
-            <h2 className="text-4xl font-bold tracking-tight text-black sm:text-5xl">
+            <h2 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">
               Ready to start earning?
             </h2>
 
-            <p className="mx-auto mt-5 max-w-xl text-lg leading-8 text-black/70">
+            <p className="mx-auto mt-5 max-w-xl text-lg leading-8 text-neutral-300">
               Create your VELOop account and explore the available ways to
               earn rewards.
             </p>
 
             <a
               href="/register"
-              className="mt-8 inline-flex rounded-xl bg-black px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-neutral-800"
+              className="home-button home-button-primary mt-8 inline-flex rounded-xl bg-yellow-400 px-7 py-3.5 text-sm font-semibold text-black transition hover:bg-yellow-300"
             >
               Create an Account
             </a>

@@ -1,5 +1,6 @@
 import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../../context/useAuth";
+import BrandMark from "../BrandMark";
 
 const navItems = [
   { label: "Dashboard", to: "/admin" },
@@ -19,9 +20,7 @@ const AdminNavbar = () => {
           to="/admin"
           className="flex items-center gap-3"
         >
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-yellow-400 font-bold text-black">
-            V
-          </div>
+          <BrandMark />
 
           <div className="text-left">
             <p className="text-lg font-bold tracking-tight">VELOop</p>

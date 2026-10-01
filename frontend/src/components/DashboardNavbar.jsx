@@ -1,5 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
+import BrandMark from "./BrandMark";
 
 const navItems = [
   {
@@ -29,9 +30,7 @@ const DashboardNavbar = () => {
           onClick={() => navigate("/dashboard")}
           className="flex items-center gap-3"
         >
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-yellow-400 font-bold text-black">
-            V
-          </div>
+          <BrandMark />
 
           <div>
             <p className="text-lg font-bold tracking-tight">

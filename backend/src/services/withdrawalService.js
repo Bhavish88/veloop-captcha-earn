@@ -24,6 +24,11 @@ import AppError from "../errors/AppError.js";
 import { WITHDRAWAL_STATUS } from "../constants/enums.js";
 import { WITHDRAWAL_TRANSITIONS } from "../constants/withdrawalTransitions.js";
 
+const toPlainObject = (document) =>
+    typeof document?.toObject === "function"
+        ? document.toObject()
+        : document;
+
 export const createWithdrawal = async ({
     userId,
     optionId,
@@ -235,9 +240,9 @@ await createAuditLog({
         });
 
         return {
-            withdrawal: result.withdrawal.toObject(),
-            transaction: result.transaction.toObject(),
-            wallet: result.wallet.toObject(),
+            withdrawal: toPlainObject(result.withdrawal),
+            transaction: toPlainObject(result.transaction),
+            wallet: toPlainObject(result.wallet),
             idempotent: result.idempotent
         };
 

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
+import BrandMark from "../components/BrandMark";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -46,9 +47,7 @@ return (
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
 
         <Link to="/" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-yellow-400 font-bold text-black">
-            V
-          </div>
+          <BrandMark />
 
           <span className="text-xl font-bold tracking-tight">
             VELOop
@@ -80,9 +79,7 @@ return (
           <div className="relative">
 
             <div className="flex items-center gap-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-yellow-400 font-bold text-black">
-                V
-              </div>
+              <BrandMark className="h-10 w-10" />
 
               <span className="text-xl font-bold">
                 VELOop Rewards

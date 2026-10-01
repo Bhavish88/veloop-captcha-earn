@@ -1,4 +1,5 @@
 import express from "express";
+import helmet from "helmet";
 import dotenv from "dotenv";
 import connectDatabase from "./config/database.js";
 import errorHandler from "./errors/errorHandler.js";
@@ -17,6 +18,8 @@ const allowedOrigins = [
   "http://localhost:5173",
   process.env.FRONTEND_URL
 ];
+
+app.use(helmet());
 
 app.use(cors({
   origin: allowedOrigins
