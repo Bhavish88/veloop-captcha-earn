@@ -339,7 +339,7 @@ These are manual smoke-test instructions, not claims that those integration scen
 ### Clone the repository
 
 ```powershell
-git clone <GITHUB_REPOSITORY_URL>
+git clone https://github.com/vishalnemlekar/VELoop
 Set-Location veloop-wallet
 ```
 
