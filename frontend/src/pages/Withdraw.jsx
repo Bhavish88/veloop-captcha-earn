@@ -432,106 +432,6 @@ const Withdraw = () => {
           </section>
         )}
 
-        <section className="mt-10" aria-labelledby="withdrawal-history-heading">
-          <div className="mb-4">
-            <h2 id="withdrawal-history-heading" className="text-xl font-bold">
-              Withdrawal history
-            </h2>
-            <p className="mt-1 text-sm text-neutral-500">
-              Your withdrawal requests, newest first.
-            </p>
-          </div>
-
-          <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
-            {withdrawalHistoryLoading ? (
-              <p className="p-8 text-center text-sm text-neutral-500" role="status">
-                Loading withdrawal history...
-              </p>
-            ) : withdrawalHistoryError ? (
-              <div className="p-6" role="alert">
-                <p className="text-sm text-red-700">{withdrawalHistoryError}</p>
-                <button
-                  type="button"
-                  onClick={retryWithdrawalHistory}
-                  className="mt-3 text-sm font-semibold text-neutral-900 underline underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-                >
-                  Retry
-                </button>
-              </div>
-            ) : withdrawals.length === 0 ? (
-              <p className="p-8 text-center text-sm text-neutral-500">
-                No withdrawals yet.
-              </p>
-            ) : (
-              <>
-                <div className="overflow-x-auto">
-                  <table className="w-full min-w-[760px] text-left">
-                    <thead className="border-b border-neutral-200 bg-neutral-50">
-                      <tr>
-                        <th scope="col" className="px-5 py-4 text-xs font-semibold uppercase text-neutral-500">Withdrawal</th>
-                        <th scope="col" className="px-5 py-4 text-xs font-semibold uppercase text-neutral-500">Method</th>
-                        <th scope="col" className="px-5 py-4 text-xs font-semibold uppercase text-neutral-500">VE cost</th>
-                        <th scope="col" className="px-5 py-4 text-xs font-semibold uppercase text-neutral-500">Payout</th>
-                        <th scope="col" className="px-5 py-4 text-xs font-semibold uppercase text-neutral-500">Status</th>
-                        <th scope="col" className="px-5 py-4 text-xs font-semibold uppercase text-neutral-500">Date</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-neutral-100">
-                      {withdrawals.map((withdrawal) => (
-                        <tr key={withdrawal.withdrawalId}>
-                          <td className="px-5 py-4 font-mono text-xs font-medium">
-                            {withdrawal.withdrawalId}
-                          </td>
-                          <td className="px-5 py-4 text-sm font-medium">
-                            {payoutMethodLabels[withdrawal.method] || withdrawal.method}
-                          </td>
-                          <td className="px-5 py-4 text-sm text-neutral-600">
-                            {Number(withdrawal.currencyAmount || 0).toLocaleString()} {withdrawal.currency}
-                          </td>
-                          <td className="px-5 py-4 text-sm font-semibold">
-                            {Number(withdrawal.payoutAmount || 0).toLocaleString()} {withdrawal.payoutCurrency}
-                          </td>
-                          <td className="px-5 py-4 text-sm">
-                            <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${withdrawalStatusClasses[withdrawal.status] || "bg-neutral-100 text-neutral-600"}`}>
-                              {withdrawal.status}
-                            </span>
-                          </td>
-                          <td className="px-5 py-4 text-sm text-neutral-500">
-                            {formatWithdrawalDate(withdrawal.requestedAt || withdrawal.createdAt)}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                <div className="flex items-center justify-between border-t border-neutral-200 px-5 py-4">
-                  <span className="text-xs text-neutral-500">
-                    Page {withdrawalPage} of {Math.max(withdrawalTotalPages, 1)}
-                  </span>
-                  <div className="flex gap-2">
-                    <button
-                      type="button"
-                      onClick={() => changeWithdrawalPage(withdrawalPage - 1)}
-                      disabled={withdrawalPage <= 1 || withdrawalHistoryLoading}
-                      className="rounded-lg border border-neutral-200 px-3 py-2 text-xs font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
-                    >
-                      Previous
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => changeWithdrawalPage(withdrawalPage + 1)}
-                      disabled={withdrawalHistoryLoading || withdrawalPage >= withdrawalTotalPages}
-                      className="rounded-lg border border-neutral-200 px-3 py-2 text-xs font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
-                    >
-                      Next
-                    </button>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-        </section>
-
         {/* WITHDRAWAL STEPS */}
         <section>
 
@@ -903,6 +803,105 @@ const Withdraw = () => {
           </section>
         )}
 
+        <section className="mt-10" aria-labelledby="withdrawal-history-heading">
+          <div className="mb-4">
+            <h2 id="withdrawal-history-heading" className="text-xl font-bold">
+              Withdrawal history
+            </h2>
+            <p className="mt-1 text-sm text-neutral-500">
+              Your withdrawal requests, newest first.
+            </p>
+          </div>
+
+          <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
+            {withdrawalHistoryLoading ? (
+              <p className="p-8 text-center text-sm text-neutral-500" role="status">
+                Loading withdrawal history...
+              </p>
+            ) : withdrawalHistoryError ? (
+              <div className="p-6" role="alert">
+                <p className="text-sm text-red-700">{withdrawalHistoryError}</p>
+                <button
+                  type="button"
+                  onClick={retryWithdrawalHistory}
+                  className="mt-3 text-sm font-semibold text-neutral-900 underline underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                >
+                  Retry
+                </button>
+              </div>
+            ) : withdrawals.length === 0 ? (
+              <p className="p-8 text-center text-sm text-neutral-500">
+                No withdrawals yet.
+              </p>
+            ) : (
+              <>
+                <div className="overflow-x-auto">
+                  <table className="w-full min-w-[760px] text-left">
+                    <thead className="border-b border-neutral-200 bg-neutral-50">
+                      <tr>
+                        <th scope="col" className="px-5 py-4 text-xs font-semibold uppercase text-neutral-500">Withdrawal</th>
+                        <th scope="col" className="px-5 py-4 text-xs font-semibold uppercase text-neutral-500">Method</th>
+                        <th scope="col" className="px-5 py-4 text-xs font-semibold uppercase text-neutral-500">VE cost</th>
+                        <th scope="col" className="px-5 py-4 text-xs font-semibold uppercase text-neutral-500">Payout</th>
+                        <th scope="col" className="px-5 py-4 text-xs font-semibold uppercase text-neutral-500">Status</th>
+                        <th scope="col" className="px-5 py-4 text-xs font-semibold uppercase text-neutral-500">Date</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-neutral-100">
+                      {withdrawals.map((withdrawal) => (
+                        <tr key={withdrawal.withdrawalId}>
+                          <td className="px-5 py-4 font-mono text-xs font-medium">
+                            {withdrawal.withdrawalId}
+                          </td>
+                          <td className="px-5 py-4 text-sm font-medium">
+                            {payoutMethodLabels[withdrawal.method] || withdrawal.method}
+                          </td>
+                          <td className="px-5 py-4 text-sm text-neutral-600">
+                            {Number(withdrawal.currencyAmount || 0).toLocaleString()} {withdrawal.currency}
+                          </td>
+                          <td className="px-5 py-4 text-sm font-semibold">
+                            {Number(withdrawal.payoutAmount || 0).toLocaleString()} {withdrawal.payoutCurrency}
+                          </td>
+                          <td className="px-5 py-4 text-sm">
+                            <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${withdrawalStatusClasses[withdrawal.status] || "bg-neutral-100 text-neutral-600"}`}>
+                              {withdrawal.status}
+                            </span>
+                          </td>
+                          <td className="px-5 py-4 text-sm text-neutral-500">
+                            {formatWithdrawalDate(withdrawal.requestedAt || withdrawal.createdAt)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="flex items-center justify-between border-t border-neutral-200 px-5 py-4">
+                  <span className="text-xs text-neutral-500">
+                    Page {withdrawalPage} of {Math.max(withdrawalTotalPages, 1)}
+                  </span>
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => changeWithdrawalPage(withdrawalPage - 1)}
+                      disabled={withdrawalPage <= 1 || withdrawalHistoryLoading}
+                      className="rounded-lg border border-neutral-200 px-3 py-2 text-xs font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                      Previous
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => changeWithdrawalPage(withdrawalPage + 1)}
+                      disabled={withdrawalHistoryLoading || withdrawalPage >= withdrawalTotalPages}
+                      className="rounded-lg border border-neutral-200 px-3 py-2 text-xs font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </section>
 
       </main>
 
