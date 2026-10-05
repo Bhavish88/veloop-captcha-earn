@@ -1,6 +1,6 @@
-from django.urls import path
+from django.urls import re_path
 from .views import HealthCheckView
 
 urlpatterns = [
-    path("health", HealthCheckView.as_view(), name="health_check"),
+    re_path(r"^health/?$", HealthCheckView.as_view(), name="health_check"),
 ]

@@ -23,6 +23,17 @@ A mock rewarded-ad flow enables users to finalize claims or dismiss challenges b
 - **4 Distinct Options**: Exactly one correct answer, two subtly modified similar distractors, and one distinct random option, shuffled per challenge.
 - **Server-Side Expiration**: Strict 120-second lifecycle enforced server-side via timezone-aware PostgreSQL timestamps.
 - **Exact Decimal Gems**: Zero floating-point arithmetic. High-precision `DecimalField(max_digits=14, decimal_places=2)`.
+
+---
+
+## Live Demo
+
+> **Deployment Status**: Deployment configuration is ready, but manual platform authentication/deployment is required.
+> Live deployment credentials and cloud accounts are not embedded in this development environment to preserve security.
+
+Once authenticated to the cloud host (Render / Vercel):
+- **Frontend**: `https://veloop-frontend.onrender.com` (or user's Vercel deployment URL)
+- **Backend API**: `https://veloop-backend.onrender.com`
 - **Atomic Wallet & Ledger**: Every balance mutation executes inside `transaction.atomic()` using PostgreSQL row-level locks (`select_for_update()`).
 - **Immutable Transaction Ledger**: Records `balance_before` and `balance_after` on every `WalletTransaction` for auditable reconciliation.
 - **Anti-Cheat & Replay Protection**: Challenges are single-use. Replay verifications return `409 ALREADY_VERIFIED`. Client-injected rewards or correctness flags are strictly ignored.
@@ -267,3 +278,57 @@ veloop-captcha-earn/
 ├── PROJECT_REPORT.md
 └── MIGRATION_PLAN.md
 ```
+
+---
+
+## 11. Production Deployment
+
+The project is fully prepared for multi-service cloud production deployment using infrastructure-as-code manifests.
+
+### Architecture Overview
+
+- **Frontend**:
+  - **Technology**: React 19 + Vite 8 (Single Page Application)
+  - **Target Platform**: Render Static Site (or Vercel)
+  - **Build Command**: `npm install && npm run build`
+  - **Publish Directory**: `dist`
+  - **Routing**: SPA fallback rewrite `/*` -> `/index.html` (configured via `render.yaml` and `frontend/vercel.json`)
+
+- **Backend**:
+  - **Technology**: Django 6.1 + Django REST Framework 3.18
+  - **Target Platform**: Render Web Service
+  - **WSGI Server**: Gunicorn (`gunicorn config.wsgi:application`)
+  - **Static Files**: WhiteNoise (`whitenoise.storage.CompressedManifestStaticFilesStorage`)
+  - **Build Command**: `pip install -r requirements.txt && python manage.py migrate && python manage.py collectstatic --noinput`
+  - **Process Definition**: Configured in `backend_django/Procfile` and `render.yaml`
+
+- **Database**:
+  - **Technology**: Managed PostgreSQL 18
+  - **Target Platform**: Render PostgreSQL (or Supabase / Neon / AWS RDS)
+  - **Connection**: SSL connection via `DATABASE_URL`
+
+### Environment Variables (Names Only)
+
+#### Backend Environment Variables
+- `DEBUG` (`False` in production)
+- `SECRET_KEY` (cryptographically generated production secret)
+- `ALLOWED_HOSTS` (comma-separated deployed backend hostnames, e.g., `.onrender.com`)
+- `DATABASE_URL` (PostgreSQL connection URI)
+- `CORS_ALLOWED_ORIGINS` (comma-separated deployed frontend origin URLs)
+- `CSRF_TRUSTED_ORIGINS` (comma-separated deployed origin URLs)
+- `JWT_ACCESS_TOKEN_LIFETIME_DAYS` (access token lifespan)
+- `JWT_REFRESH_TOKEN_LIFETIME_DAYS` (refresh token lifespan)
+
+#### Frontend Environment Variables
+- `VITE_API_URL` (full URL to deployed Django REST API endpoint, e.g., `https://veloop-backend.onrender.com/api`)
+
+### Automated Blueprint Deployment (Render)
+
+The root [`render.yaml`](file:///c:/B-Projects/Veloop/render.yaml) blueprint defines all three interconnected services (Backend, Database, Frontend):
+
+1. Link this repository to your [Render](https://render.com) dashboard.
+2. Select **Blueprints** -> **New Blueprint Instance**.
+3. Select this repository branch (`django-postgres-migration`).
+4. Render automatically provisions the PostgreSQL database, injects `DATABASE_URL`, builds the Django API, executes database migrations, collects static assets, and builds the Vite frontend.
+5. Deployment configuration is ready, but manual platform authentication/deployment is required.
+
