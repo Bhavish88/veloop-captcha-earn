@@ -8,6 +8,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Withdraw from "./pages/Withdraw";
 import Wallet from "./pages/Wallet";
+import CaptchaPage from "./pages/CaptchaPage";
 
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminWithdrawals from "./pages/admin/AdminWithdrawals";
@@ -56,6 +57,15 @@ function App() {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/captcha"
+          element={
+            <ProtectedRoute>
+              <CaptchaPage />
             </ProtectedRoute>
           }
         />

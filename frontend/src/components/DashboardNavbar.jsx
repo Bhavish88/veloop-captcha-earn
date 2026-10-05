@@ -8,6 +8,10 @@ const navItems = [
     to: "/dashboard",
   },
   {
+    label: "Captcha Earn",
+    to: "/captcha",
+  },
+  {
     label: "Wallet",
     to: "/wallet",
   },

@@ -797,7 +797,11 @@ const Dashboard = () => {
                 Solve simple captchas and earn Gems rewards.
               </p>
 
-              <button className="mt-5 text-sm font-semibold">
+              <button
+                type="button"
+                onClick={() => navigate("/captcha")}
+                className="mt-5 text-sm font-semibold text-blue-600 hover:text-blue-700 transition"
+              >
                 Start Task →
               </button>
 
