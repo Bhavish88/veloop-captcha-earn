@@ -288,7 +288,7 @@ const Withdraw = () => {
 
 
       {/* MAIN */}
-      <main className="mx-auto max-w-5xl px-5 py-8 lg:px-8">
+      <main className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
 
         {/* PAGE HEADER */}
         <section className="mb-8">

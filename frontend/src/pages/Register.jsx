@@ -45,7 +45,7 @@ const Register = () => {
 
       {/* Header */}
       <header className="border-b border-neutral-200 bg-white">
-        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
+        <div className="mx-auto flex h-16 sm:h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
 
           <Link to="/" className="flex items-center gap-2">
             <BrandMark />
@@ -57,7 +57,7 @@ const Register = () => {
 
           <Link
             to="/"
-            className="text-sm font-medium text-neutral-600 transition hover:text-black"
+            className="text-xs sm:text-sm font-medium text-neutral-600 transition hover:text-black"
           >
             Back to home
           </Link>
@@ -67,9 +67,9 @@ const Register = () => {
 
 
       {/* Main */}
-      <main className="mx-auto flex min-h-[calc(100vh-80px)] max-w-7xl items-center px-6 py-12 lg:px-8">
+      <main className="mx-auto flex min-h-[calc(100vh-80px)] max-w-7xl items-center px-4 py-6 sm:px-6 sm:py-12 lg:px-8">
 
-        <div className="grid w-full overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-xl shadow-neutral-200/50 lg:grid-cols-2">
+        <div className="grid w-full overflow-hidden rounded-2xl sm:rounded-3xl border border-neutral-200 bg-white shadow-xl shadow-neutral-200/50 lg:grid-cols-2">
 
 
           {/* Left panel */}
@@ -137,7 +137,7 @@ const Register = () => {
 
 
           {/* Registration form */}
-          <div className="flex items-center justify-center p-8 sm:p-12 lg:p-16">
+          <div className="flex items-center justify-center p-5 sm:p-10 md:p-12 lg:p-16">
 
             <div className="w-full max-w-md">
 

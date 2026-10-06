@@ -107,13 +107,13 @@ function Wallet() {
   return (
     <div className="min-h-screen bg-neutral-50 text-neutral-950">
       <DashboardNavbar />
-      <main className="mx-auto max-w-7xl px-5 py-8 lg:px-8">
+      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <section className="mb-8">
           <Link
             to="/dashboard"
             className="mb-5 inline-block text-sm font-medium text-neutral-500 underline-offset-4 hover:text-black hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
           >
-            Back to Dashboard
+            ← Back to Dashboard
           </Link>
           <h1 className="text-3xl font-bold tracking-tight">Wallet</h1>
           <p className="mt-2 text-sm text-neutral-500">

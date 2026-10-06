@@ -27,19 +27,19 @@ export default function CaptchaOption({
       type="button"
       onClick={() => onSelect(option)}
       disabled={isDisabled}
-      className={`group relative flex items-center justify-between rounded-xl border p-4 text-left transition-all duration-200 ${stateClasses}`}
+      className={`group relative flex min-h-[52px] items-center justify-between rounded-xl border p-3.5 sm:p-4 text-left transition-all duration-200 ${stateClasses}`}
     >
-      <div className="flex items-center gap-3">
-        <span className="flex h-7 w-7 items-center justify-center rounded-lg border border-slate-700/60 bg-slate-800/80 text-xs font-bold text-slate-400 group-hover:border-slate-600 group-hover:text-slate-300">
+      <div className="flex items-center gap-2.5 sm:gap-3">
+        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-slate-700/60 bg-slate-800/80 text-xs font-bold text-slate-400 group-hover:border-slate-600 group-hover:text-slate-300">
           {optionLabels[index] || index + 1}
         </span>
-        <span className="font-mono text-lg font-bold tracking-widest">
+        <span className="font-mono text-base sm:text-lg font-bold tracking-wider sm:tracking-widest">
           {option}
         </span>
       </div>
 
       {isSelected && (
-        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500/20 text-xs text-blue-400">
+        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-blue-500/20 text-xs text-blue-400">
           ✓
         </span>
       )}

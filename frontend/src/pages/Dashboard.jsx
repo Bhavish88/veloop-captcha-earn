@@ -45,7 +45,7 @@ const Dashboard = () => {
           api.get(
             `/wallet/transactions?page=${transactionPage}&limit=${transactionLimit}`
           ),
-          api.get("/withdrawals"),
+          api.get("/withdrawals").catch(() => ({ data: { data: [] } })),
         ]);
 
         const walletData = walletResponse.data.data;
@@ -118,7 +118,7 @@ const Dashboard = () => {
 
     <DashboardNavbar />
 
-      <main className="mx-auto max-w-7xl px-5 py-8 lg:px-8">
+      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
 
         {/* WELCOME */}
         <section className="mb-8">
@@ -126,7 +126,7 @@ const Dashboard = () => {
             Welcome back
           </p>
 
-          <h1 className="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">
+          <h1 className="mt-1 text-2xl font-bold tracking-tight sm:text-4xl">
             {user?.name || "User"}
           </h1>
 
@@ -139,7 +139,7 @@ const Dashboard = () => {
         {/* BALANCE */}
         <section className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
 
-          <div className="relative overflow-hidden rounded-3xl bg-neutral-950 p-7 text-white shadow-sm">
+          <div className="relative overflow-hidden rounded-3xl bg-neutral-950 p-5 sm:p-7 text-white shadow-sm">
 
             <div className="absolute -right-20 -top-20 h-56 w-56 rounded-full bg-yellow-400/15 blur-3xl" />
 
@@ -156,7 +156,7 @@ const Dashboard = () => {
               </div>
 
               <div className="mt-4 flex items-end gap-3">
-                <span className="text-5xl font-bold tracking-tight">
+                <span className="text-4xl sm:text-5xl font-bold tracking-tight">
                   {ves}
                 </span>
 
@@ -171,7 +171,7 @@ const Dashboard = () => {
 
               <button
                 onClick={() => navigate("/withdraw")}
-                className="mt-7 rounded-xl bg-yellow-400 px-5 py-3 text-sm font-bold text-black transition hover:bg-yellow-300"
+                className="mt-6 sm:mt-7 rounded-xl bg-yellow-400 px-5 py-3 text-sm font-bold text-black transition hover:bg-yellow-300"
               >
                 Withdraw Rewards
               </button>
@@ -181,18 +181,18 @@ const Dashboard = () => {
           </div>
 
 
-          <div className="rounded-3xl border border-neutral-200 bg-white p-7 shadow-sm">
+          <div className="rounded-3xl border border-neutral-200 bg-white p-5 sm:p-7 shadow-sm">
 
             <p className="text-sm font-medium text-neutral-500">
               Available Balance
             </p>
 
             <div className="mt-3 flex items-baseline gap-2">
-              <span className="text-4xl font-bold tracking-tight">
+              <span className="text-3xl sm:text-4xl font-bold tracking-tight">
                 ₹
               </span>
 
-              <span className="text-4xl font-bold tracking-tight">
+              <span className="text-3xl sm:text-4xl font-bold tracking-tight">
                 {Number(summary?.balance ?? 0).toLocaleString("en-IN")}
               </span>
             </div>
@@ -227,7 +227,7 @@ const Dashboard = () => {
           </div>
 
 
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
+          <div className="grid grid-cols-2 gap-2.5 sm:gap-3 md:grid-cols-5">
 
             {[
               ["SVEs", sves],
@@ -237,24 +237,24 @@ const Dashboard = () => {
             ].map(([label, value]) => (
               <div
                 key={label}
-                className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm"
+                className="rounded-2xl border border-neutral-200 bg-white p-4 sm:p-5 shadow-sm"
               >
                 <p className="text-xs font-medium text-neutral-500">
                   {label}
                 </p>
 
-                <p className="mt-3 text-2xl font-bold">
+                <p className="mt-2.5 text-xl sm:text-2xl font-bold">
                   {value}
                 </p>
               </div>
             ))}
 
-            <div className="rounded-2xl border border-yellow-200 bg-yellow-50 p-5 shadow-sm">
+            <div className="col-span-2 sm:col-span-1 rounded-2xl border border-yellow-200 bg-yellow-50 p-4 sm:p-5 shadow-sm">
               <p className="text-xs font-medium text-yellow-700">
                 VEs
               </p>
 
-              <p className="mt-3 text-2xl font-bold text-neutral-950">
+              <p className="mt-2.5 text-xl sm:text-2xl font-bold text-neutral-950">
                 {ves}
               </p>
             </div>
@@ -267,7 +267,7 @@ const Dashboard = () => {
         {/* REFERRAL BANNER */}
         <section className="mt-8">
 
-          <div className="flex flex-col gap-5 rounded-2xl border border-yellow-200 bg-yellow-50 p-6 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-col gap-4 sm:gap-5 rounded-2xl border border-yellow-200 bg-yellow-50 p-4 sm:p-6 md:flex-row md:items-center md:justify-between">
 
             <div className="flex items-start gap-4">
 
